@@ -8,8 +8,9 @@ $(function(){
 		local: false,
 		imgUrlBase: "",
 		albumAPI: "",
-		echoNestAPI: "http://developer.echonest.com/api/v4/song/profile?api_key=0QEJCQCJIBTN2U6UG&format=jsonp&callback=echoNest&bucket=id:rdio-us-streaming&bucket=audio_summary",
+		echoNestAPI: "http://developer.echonest.com/api/v4/song/profile?api_key=0QEJCQCJIBTN2U6UG&format=jsonp&bucket=id:rdio-us-streaming&bucket=id:rdio-us-streaming",
 		// http://developer.echonest.com/api/v4/track/profile?api_key=0QEJCQCJIBTN2U6UG&format=json&id=musicbrainz:track:%id%&bucket=audio_summary
+		rdioPlayer: "http://embedtacular.appspot.com/",
 		data: null,
 		fetchCovers: function(color) {
 			if(coverHack.firstRun) {
@@ -32,29 +33,56 @@ $(function(){
 				jsonp: false,
 				jsonpCallback: "mbalbums",
 				cache: false,
-				success: function(data, textStatus, jqXHR) {
+				success: function(data) {
 					coverHack.processing = false;
 					coverHack.data = data;
 					coverHack.view.showAlbums();
-					// window.setTimeout(function() { coverHack.view.showAlbums(); }, 1000);
 					coverHack.resolveTracks();
 				}
 			});
 		},
 		resolveTracks: function() {
+			var tracks = [],
+				i,
+				j = 0;
+			for(i = 0; i < coverHack.data.length; i++) {
+				// if(j%10 === 0) {
+				// 	tracks.push([]);
+				// }
+				// tracks[Math.floor(j/10)].push("id=musicbrainz:song:" + coverHack.data[i].tracks[0]);
+				// j++;
+
+				coverHack.fetchTrack(coverHack.data[i].tracks[0], i, 0);
+
+				// for(j = 0; j < coverHack.data[i].tracks.length; j++) {
+				// 	coverHack.fetchTrack(coverHack.data[i].tracks[j], i, j);
+				// 	tracks.push("id=musicbrainz:song:" + coverHack.data[i].tracks[j]);
+				// }
+			}
+			// for(i = 0; i < tracks.length; i++) {
+			// 	tracks[i] = tracks[i].join('&');				
+			// }
+
+		},
+		fetchTrack: function(trackMBID, albumIndex, trackIndex) {
 			$.ajax({
-				url: coverHack.echoNestAPI,
+				url: coverHack.echoNestAPI + "&id=musicbrainz:song:" + trackMBID,
 				timeout: 5000,
 				dataType: "jsonp",
-				jsonp: false,
-				jsonpCallback: "mbalbums",
-				cache: false,
-				success: function(data, textStatus, jqXHR) {
-					coverHack.processing = false;
-					coverHack.data = data;
-					coverHack.view.showAlbums();
-					// window.setTimeout(function() { coverHack.view.showAlbums(); }, 1000);
-					coverHack.resolveTracks();
+				cache: true,
+				success: function(data) {
+					console.log("response for " + albumIndex + " : " + trackIndex);
+					if(data.response.status.code === 0 && data.response.songs.length > 0) {
+						song = data.response.songs[0];
+					 	if(typeof(song.foreign_ids) !== 'undefined') {
+							console.log('found playable song!');
+							coverHack.data[albumIndex].rdio = song.foreign_ids[0].foreign_id.replace('rdio-us-streaming:song:', '');
+							coverHack.view.showPlay(albumIndex);
+							console.log(coverHack.data[albumIndex]);
+						}
+					} else {
+						console.log('album unplayable :(');
+					}
 				}
 			});
 		},
@@ -144,7 +172,7 @@ $(function(){
 			}
 		},
 		view: {
-			albumTpl: '<li id="%id%"><img src="%baseurl%/%id%"></li>',
+			albumTpl: '<li id="%i%"><img src="%baseurl%/%id%"></li>',
 			showAlbums: function() {
 				$("#progress" ).hide();
 				var i,
@@ -155,6 +183,7 @@ $(function(){
 					album = coverHack.data[i];
 					tpl = coverHack.view.albumTpl;
 					tpl = tpl.replace(/%baseurl%/g, coverHack.imgUrlBase);
+					tpl = tpl.replace(/%i%/g, i);
 					tpl = tpl.replace(/%id%/g, album.release);
 					albumsHTML.push(tpl);
 				}
@@ -174,6 +203,9 @@ $(function(){
 			changeBG: function(color) {
 				color = coverHack.util.color.lighterColor(color, .6);
 				$('body').animate( { backgroundColor: color }, 1000);
+			},
+			showPlay: function(albumId) {
+				$('#albums #' + albumId).append('<a href="#play" class="play" data-rdio="'+ coverHack.data[albumId].rdio +'">play</a>');
 			},
 			createColorWheel: function() {
 				var r = Raphael("color-wheel");
@@ -207,6 +239,11 @@ $(function(){
 			coverHack.imgUrlBase = coverHack.local ? 
 				"/img/covers" :
 				"http://musicbrainz.homeip.net/coverarthack/image";
+			// hook up the play buttons
+			$('#albums .play').live( "click", function(e) {
+				$('#player #play').attr("src", coverHack.rdioPlayer + $(this).data('rdio')); 
+				e.preventDefault();
+			});
 		}
 	};
 	coverHack.init();	
