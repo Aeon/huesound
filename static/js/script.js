@@ -18,14 +18,14 @@ $(function(){
 			color = color.replace('#', '');
 
 			$.ajax({
-				url: "/images.json?ts"+(+new Date()),
-				//url: "http://musicbrainz.homeip.net/coverarthack/images.html?c=" + color + "&n=30", // 30 gives us a 6x5 grid, looks nice
-				//&ts"+(+new Date()),
+				// url: "/images.json?ts"+(+new Date()),
+				url: "http://musicbrainz.homeip.net/coverarthack/images/" + color + "/30", // 30 gives us a 6x5 grid, looks nice
+				//?ts"+(+new Date()),
 				success: function(data, textStatus, jqXHR) {
 					coverHack.data = data;
-					// coverHack.view.showAlbums(data);
-					coverHack.resolveTracks();
-					window.setTimeout(function() { coverHack.view.showAlbums(); }, 1000);
+					coverHack.view.showAlbums(data);
+					// coverHack.resolveTracks();
+					// window.setTimeout(function() { coverHack.view.showAlbums(); }, 1000);
 				}
 			});
 		},
@@ -117,8 +117,8 @@ $(function(){
 			}
 		},
 		view: {
-			// albumTpl: '<li id="%id%"><img src="http://musicbrainz.homeip.net/coverarthack/image.html?id=%id%"></li>',
-			albumTpl: '<li id="%id%"><img src="/img/covers/%id%.jpg"></li>',
+			albumTpl: '<li id="%id%"><img src="http://musicbrainz.homeip.net/image/%id%.jpg"></li>',
+			// albumTpl: '<li id="%id%"><img src="/img/covers/%id%.jpg"></li>',
 			showAlbums: function() {
 				$("#progress" ).hide();
 				var i,
