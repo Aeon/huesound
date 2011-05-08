@@ -92,12 +92,53 @@ a:hover { color: #036; }
 }
 
 
+footer {
+  text-align: center;
+  color: #AAA;
+  clear: both;
+  position: fixed;
+  top: 850px;
+  width: 100%;
+}
 
+#instructions, #albumsContainer {
+  position: fixed;
+  left: 650px;
+  top: 100px;
+  width: 700px; /* 6 albums + 5 spacers) */
+  height: 700px;
+}
 
+#albumsContainer {
+  display: none;
+}
 
+#albumsContainer ul {
+  list-style: none;
+  margin: 0;
+}
 
+#albumsContainer li {
+  float: left;
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+/*  display: none;*/
+}
+#albumsContainer li img {
+  width: 100px;
+  height: 100px;
+}
 
-
+#albumsContainer #progress {
+  background-image: url("/img/ajax-loader.gif");
+  display: block;
+  height: 24px;
+  left: 300px;
+  position: relative;
+  top: 200px;
+  width: 24px;
+}
 
 
 

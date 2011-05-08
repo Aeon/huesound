@@ -1,19 +1,35 @@
 $(function(){
 	coverHack = {
 		allColors: ['#000000', '#CC3333', '#FF3333', '#FF6633', '#FF9933', '#FFCC66', '#FFFF33', '#CCCC33', '#99CC33', '#33CC33', '#009933', '#006633', '#33CC99', '#33CCFF', '#3366CC', '#333399', '#000066', '#663399', '#990099', '#990066', '#FF0066', '#CCCC99', '#996666', '#996633', '#663333', '#CC9966', '#996633', '#663300', '#333300', '#330000', '#333333', '#666666'],
+		firstRun: true,
+		processing: false,
+		echoNestApi: "http://developer.echonest.com/api/v4/track/profile?api_key=N6E4NIOVYMTHNDM8J&format=json&id=TRXXHTJ1294CD8F3B3&bucket=audio_summary",
+		data: null,
 		fetchCovers: function(color) {
 			coverHack.view.changeBG(color);
+			if(coverHack.firstRun) {
+				$( "#instructions" ).toggle( 'puff', {}, 500, function() {
+					$( "#albumsContainer" ).show();
+				} );
+				coverHack.firstRun = false;
+			} else if(!processing) {
+				coverHack.view.hideAlbums();
+			}
 			color = color.replace('#', '');
 
-			console.log('GET covers from MB for color ' + color);
 			$.ajax({
 				url: "/images.json?ts"+(+new Date()),
-				//url: "http://musicbrainz.homeip.net/coverarthack/images.html?c=" + color + "&n=50",
+				//url: "http://musicbrainz.homeip.net/coverarthack/images.html?c=" + color + "&n=30", // 30 gives us a 6x5 grid, looks nice
 				//&ts"+(+new Date()),
 				success: function(data, textStatus, jqXHR) {
-					coverHack.showCovers(data);
+					coverHack.data = data;
+					// coverHack.view.showAlbums(data);
+					coverHack.resolveTracks();
+					window.setTimeout(function() { coverHack.view.showAlbums(); }, 1000);
 				}
 			});
+		},
+		resolveTracks: function() {
 		},
 		util: {
 			// http://stackoverflow.com/questions/1507931/generate-lighter-darker-color-in-css-using-javascript
@@ -101,8 +117,28 @@ $(function(){
 			}
 		},
 		view: {
-			showCovers: function() {
-				console.log(data);
+			// albumTpl: '<li id="%id%"><img src="http://musicbrainz.homeip.net/coverarthack/image.html?id=%id%"></li>',
+			albumTpl: '<li id="%id%"><img src="/img/covers/%id%.jpg"></li>',
+			showAlbums: function() {
+				$("#progress" ).hide();
+				var i,
+					albumsHTML = [];
+				for(i = 0; i < coverHack.data.length; i++) {
+					album = coverHack.data[i];
+					tpl = coverHack.view.albumTpl;
+					albumsHTML.push(tpl.replace(/%id%/g, album.release));
+				}
+				// insert albums into page
+				$('#albums').html(albumsHTML.join(''));
+
+				// // show all the covers
+				// $('#albums li').toggle('puff', {}, 100);
+			},
+			hideAlbums: function() {
+				// loop through albums and hide them all, one after another
+				$('#albums li').each( function(i, album) {
+					album.toggle('puff', {}, 500, function(){ $.remove(album); });
+				});
 			},
 			changeBG: function(color) {
 				color = coverHack.util.color.lighterColor(color, .6);
