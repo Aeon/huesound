@@ -204,8 +204,12 @@ $(function(){
 				color = coverHack.util.color.lighterColor(color, .6);
 				$('body').animate( { backgroundColor: color }, 1000);
 			},
-			showPlay: function(albumId) {
-				$('#albums #' + albumId).append('<a href="#play" class="play" data-rdio="'+ coverHack.data[albumId].rdio +'">play</a>');
+			showPlay: function(albumIndex) {
+				var albumCover = $('#albums #' + albumIndex);
+				albumCover.data('rdio', coverHack.data[albumIndex].rdio);
+				albumCover.addClass('play');
+				albumCover.append('<div class="playbtn"></div>');
+				$('.playbtn', albumCover).fadeIn(500);
 			},
 			createColorWheel: function() {
 				var r = Raphael("color-wheel");
@@ -242,8 +246,8 @@ $(function(){
 			// hook up the play buttons
 			$('#albums .play').live( "click", function(e) {
 				$('#player #play').attr("src", coverHack.rdioPlayer + $(this).data('rdio')); 
-				e.preventDefault();
 			});
+			$('#player #play').attr("src", ""); 
 		}
 	};
 	coverHack.init();	

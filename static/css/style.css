@@ -159,6 +159,19 @@ footer {
 	margin:0 0 0 50px;
 }
 
+#albumsContainer .playbtn {
+  background-image: url("/img/play-up.png");
+  top: -65px;
+  left: 0px;
+  width: 60px;
+  height: 60px;
+  position: relative;
+  display: none;
+}
+
+#albumsContainer .playbtn:hover {
+  background-image: url("/img/play-over.png");
+}
 
 
 .ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
