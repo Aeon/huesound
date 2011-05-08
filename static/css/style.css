@@ -86,7 +86,7 @@ a:hover { color: #036; }
     \\ ========================================== //
 */
 
-#holder {
+#color-wheel {
   display: block;
   height: 500px;
 }
