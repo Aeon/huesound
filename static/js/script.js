@@ -5,32 +5,37 @@ $(function(){
 		albumCount: 30,
 		firstRun: true,
 		processing: false,
-		echoNestApi: "http://developer.echonest.com/api/v4/track/profile?api_key=N6E4NIOVYMTHNDM8J&format=json&id=TRXXHTJ1294CD8F3B3&bucket=audio_summary",
+		local: true,
+		albumAPI: "",
+		echoNestAPI: "http://developer.echonest.com/api/v4/track/profile?api_key=0QEJCQCJIBTN2U6UG&format=json&id=musicbrainz:track:%id%&bucket=audio_summary",
 		data: null,
 		fetchCovers: function(color) {
-			coverHack.view.changeBG(color);
 			if(coverHack.firstRun) {
 				$( "#instructions" ).toggle( 'puff', {}, 500, function() {
 					$( "#albumsContainer" ).show();
 				} );
 				coverHack.firstRun = false;
-			} else if(!processing) {
+			} else if(!coverHack.processing) {
 				coverHack.view.hideAlbums();
+			} else {
+				return;
 			}
+			coverHack.view.changeBG(color);
 			color = color.replace('#', '');
-
+			coverHack.processing = true;
 			$.ajax({
-				url: "/images.json?ts"+(+new Date()),
-				// url: "http://musicbrainz.homeip.net/coverarthack/images.html?c=" + color + "&n=" + coverHack.albumCount,
-				// url: "http://musicbrainz.homeip.net/coverarthack/images/" + color + "/" + coverHack.albumCount,
-				//?ts"+(+new Date()),
+				url: coverHack.albumAPI,
 				timeout: 5000,
-				dataType: "json",
+				dataType: "jsonp",
+				jsonp: false,
+				jsonpCallback: "mbalbums",
+				cache: false,
 				success: function(data, textStatus, jqXHR) {
+					coverHack.processing = false;
 					coverHack.data = data;
-					coverHack.view.showAlbums(data);
-					// coverHack.resolveTracks();
+					coverHack.view.showAlbums();
 					// window.setTimeout(function() { coverHack.view.showAlbums(); }, 1000);
+					// coverHack.resolveTracks();
 				}
 			});
 		},
@@ -140,9 +145,10 @@ $(function(){
 				// $('#albums li').toggle('puff', {}, 100);
 			},
 			hideAlbums: function() {
+				$("#progress").show();
 				// loop through albums and hide them all, one after another
 				$('#albums li').each( function(i, album) {
-					album.toggle('puff', {}, 500, function(){ $.remove(album); });
+					$(album).remove();
 				});
 			},
 			changeBG: function(color) {
@@ -174,6 +180,10 @@ $(function(){
 		},
 		init: function() {
 			coverHack.view.createColorWheel();
+			coverHack.albumAPI = coverHack.local ? 
+				"/images.json" :
+				"http://musicbrainz.homeip.net/coverarthack/images/" + color + "/" + coverHack.albumCount;
+				// + "?ts"+(+new Date());
 		}
 	};
 	coverHack.init();	
