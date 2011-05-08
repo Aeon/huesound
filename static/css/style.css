@@ -173,6 +173,14 @@ footer {
   background-image: url("/img/play-over.png");
 }
 
+#large-album {
+  display: block;
+  height: 300px;
+  left: 1250px;
+  position: fixed;
+  top: 160px;
+  width: 300px;
+}
 
 .ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
 .hidden { display: none; visibility: hidden; }

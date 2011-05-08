@@ -172,7 +172,7 @@ $(function(){
 			}
 		},
 		view: {
-			albumTpl: '<li id="%i%"><img src="%baseurl%/%id%"></li>',
+			albumTpl: '<li id="%i%" data-album="%id%"><img src="%baseurl%/%id%"></li>',
 			showAlbums: function() {
 				$("#progress" ).hide();
 				var i,
@@ -245,7 +245,8 @@ $(function(){
 				"http://musicbrainz.homeip.net/coverarthack/image";
 			// hook up the play buttons
 			$('#albums .play').live( "click", function(e) {
-				$('#player #play').attr("src", coverHack.rdioPlayer + $(this).data('rdio')); 
+				$('#player #play').attr("src", coverHack.rdioPlayer + $(this).data('rdio'));
+				$('#large-album').css("background-image", 'url("' + coverHack.imgUrlBase + '/' + $(this).data('album') + '")');  
 			});
 			$('#player #play').attr("src", ""); 
 		}
