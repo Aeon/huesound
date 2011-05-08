@@ -1,6 +1,8 @@
 $(function(){
 	coverHack = {
 		allColors: ['#000000', '#CC3333', '#FF3333', '#FF6633', '#FF9933', '#FFCC66', '#FFFF33', '#CCCC33', '#99CC33', '#33CC33', '#009933', '#006633', '#33CC99', '#33CCFF', '#3366CC', '#333399', '#000066', '#663399', '#990099', '#990066', '#FF0066', '#CCCC99', '#996666', '#996633', '#663333', '#CC9966', '#996633', '#663300', '#333300', '#330000', '#333333', '#666666'],
+		// 30 gives us a 6x5 grid, looks nice
+		albumCount: 30,
 		firstRun: true,
 		processing: false,
 		echoNestApi: "http://developer.echonest.com/api/v4/track/profile?api_key=N6E4NIOVYMTHNDM8J&format=json&id=TRXXHTJ1294CD8F3B3&bucket=audio_summary",
@@ -18,9 +20,12 @@ $(function(){
 			color = color.replace('#', '');
 
 			$.ajax({
-				// url: "/images.json?ts"+(+new Date()),
-				url: "http://musicbrainz.homeip.net/coverarthack/images/" + color + "/30", // 30 gives us a 6x5 grid, looks nice
+				url: "/images.json?ts"+(+new Date()),
+				// url: "http://musicbrainz.homeip.net/coverarthack/images.html?c=" + color + "&n=" + coverHack.albumCount,
+				// url: "http://musicbrainz.homeip.net/coverarthack/images/" + color + "/" + coverHack.albumCount,
 				//?ts"+(+new Date()),
+				timeout: 5000,
+				dataType: "json",
 				success: function(data, textStatus, jqXHR) {
 					coverHack.data = data;
 					coverHack.view.showAlbums(data);
@@ -117,8 +122,8 @@ $(function(){
 			}
 		},
 		view: {
-			albumTpl: '<li id="%id%"><img src="http://musicbrainz.homeip.net/image/%id%.jpg"></li>',
-			// albumTpl: '<li id="%id%"><img src="/img/covers/%id%.jpg"></li>',
+			// albumTpl: '<li id="%id%"><img src="http://musicbrainz.homeip.net/image/%id%.jpg"></li>',
+			albumTpl: '<li id="%id%"><img src="/img/covers/%id%.jpg"></li>',
 			showAlbums: function() {
 				$("#progress" ).hide();
 				var i,
