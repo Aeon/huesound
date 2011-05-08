@@ -8,12 +8,12 @@ $(function(){
 		local: false,
 		imgUrlBase: "",
 		albumAPI: "",
-		echoNestAPI: "http://developer.echonest.com/api/v4/song/profile?api_key=0QEJCQCJIBTN2U6UG&format=json&id=musicbrainz:song:%track%&bucket=id:rdio-us-streaming",
+		echoNestAPI: "http://developer.echonest.com/api/v4/song/profile?api_key=0QEJCQCJIBTN2U6UG&format=jsonp&callback=echoNest&bucket=id:rdio-us-streaming&bucket=audio_summary",
 		// http://developer.echonest.com/api/v4/track/profile?api_key=0QEJCQCJIBTN2U6UG&format=json&id=musicbrainz:track:%id%&bucket=audio_summary
 		data: null,
 		fetchCovers: function(color) {
 			if(coverHack.firstRun) {
-				$( "#instructions" ).toggle( 'puff', {}, 500, function() {
+				$( "#instructions_txt" ).toggle( 'puff', {}, 500, function() {
 					$( "#albumsContainer" ).show();
 				} );
 				coverHack.firstRun = false;
