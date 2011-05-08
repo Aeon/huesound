@@ -97,7 +97,7 @@ footer {
   color: #AAA;
   clear: both;
   position: fixed;
-  top: 850px;
+  top: 650px;
   width: 100%;
 }
 
@@ -118,8 +118,8 @@ footer {
 
 #albumsContainer {
   position: fixed;
-  left: 450px;
-  top: 100px;
+  left: 500px;
+  top: 40px;
   width: 700px; /* 6 albums + 5 spacers) */
   height: 700px;
 }
