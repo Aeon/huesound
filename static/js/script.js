@@ -5,9 +5,11 @@ $(function(){
 		albumCount: 30,
 		firstRun: true,
 		processing: false,
-		local: true,
+		local: false,
+		imgUrlBase: "",
 		albumAPI: "",
-		echoNestAPI: "http://developer.echonest.com/api/v4/track/profile?api_key=0QEJCQCJIBTN2U6UG&format=json&id=musicbrainz:track:%id%&bucket=audio_summary",
+		echoNestAPI: "http://developer.echonest.com/api/v4/song/profile?api_key=0QEJCQCJIBTN2U6UG&format=json&id=musicbrainz:song:%track%&bucket=id:rdio-us-streaming",
+		// http://developer.echonest.com/api/v4/track/profile?api_key=0QEJCQCJIBTN2U6UG&format=json&id=musicbrainz:track:%id%&bucket=audio_summary
 		data: null,
 		fetchCovers: function(color) {
 			if(coverHack.firstRun) {
@@ -24,7 +26,7 @@ $(function(){
 			color = color.replace('#', '');
 			coverHack.processing = true;
 			$.ajax({
-				url: coverHack.albumAPI,
+				url: coverHack.albumAPI.replace(/%color%/, color),
 				timeout: 5000,
 				dataType: "jsonp",
 				jsonp: false,
@@ -35,11 +37,26 @@ $(function(){
 					coverHack.data = data;
 					coverHack.view.showAlbums();
 					// window.setTimeout(function() { coverHack.view.showAlbums(); }, 1000);
-					// coverHack.resolveTracks();
+					coverHack.resolveTracks();
 				}
 			});
 		},
 		resolveTracks: function() {
+			$.ajax({
+				url: coverHack.echoNestAPI,
+				timeout: 5000,
+				dataType: "jsonp",
+				jsonp: false,
+				jsonpCallback: "mbalbums",
+				cache: false,
+				success: function(data, textStatus, jqXHR) {
+					coverHack.processing = false;
+					coverHack.data = data;
+					coverHack.view.showAlbums();
+					// window.setTimeout(function() { coverHack.view.showAlbums(); }, 1000);
+					coverHack.resolveTracks();
+				}
+			});
 		},
 		util: {
 			// http://stackoverflow.com/questions/1507931/generate-lighter-darker-color-in-css-using-javascript
@@ -127,16 +144,19 @@ $(function(){
 			}
 		},
 		view: {
-			// albumTpl: '<li id="%id%"><img src="http://musicbrainz.homeip.net/image/%id%.jpg"></li>',
-			albumTpl: '<li id="%id%"><img src="/img/covers/%id%.jpg"></li>',
+			albumTpl: '<li id="%id%"><img src="%baseurl%/%id%.jpg"></li>',
 			showAlbums: function() {
 				$("#progress" ).hide();
 				var i,
+					album,
+					tpl,
 					albumsHTML = [];
 				for(i = 0; i < coverHack.data.length; i++) {
 					album = coverHack.data[i];
 					tpl = coverHack.view.albumTpl;
-					albumsHTML.push(tpl.replace(/%id%/g, album.release));
+					tpl = tpl.replace(/%baseurl%/g, coverHack.imgUrlBase);
+					tpl = tpl.replace(/%id%/g, album.release);
+					albumsHTML.push(tpl);
 				}
 				// insert albums into page
 				$('#albums').html(albumsHTML.join(''));
@@ -182,8 +202,11 @@ $(function(){
 			coverHack.view.createColorWheel();
 			coverHack.albumAPI = coverHack.local ? 
 				"/images.json" :
-				"http://musicbrainz.homeip.net/coverarthack/images/" + color + "/" + coverHack.albumCount;
+				"http://musicbrainz.homeip.net/coverarthack/images/%color%/" + coverHack.albumCount;
 				// + "?ts"+(+new Date());
+			coverHack.imgUrlBase = coverHack.local ? 
+				"/img/covers" :
+				"http://musicbrainz.homeip.net/image";
 		}
 	};
 	coverHack.init();	
