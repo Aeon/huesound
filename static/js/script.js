@@ -29,22 +29,68 @@ $(function(){
 
 				// Ratio is between 0 and 1
 				changeColor: function(color, ratio, darker) {
-				    var difference = Math.round(ratio * 255) * (darker ? -1 : 1),
-				        minmax     = darker ? Math.max : Math.min,
-				        decimal    = color.replace(
-				            /^#?([a-z0-9][a-z0-9])([a-z0-9][a-z0-9])([a-z0-9][a-z0-9])/i,
+				    // Trim trailing/leading whitespace
+				    color = color.replace(/^\s*|\s*$/, '');
+
+				    // Expand three-digit hex
+				    color = color.replace(
+				        /^#?([a-f0-9])([a-f0-9])([a-f0-9])$/i,
+				        '#$1$1$2$2$3$3'
+				    );
+
+				    // Calculate ratio
+				    var difference = Math.round(ratio * 256) * (darker ? -1 : 1),
+				        // Determine if input is RGB(A)
+				        rgb = color.match(new RegExp('^rgba?\\(\\s*' +
+				            '(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
+				            '\\s*,\\s*' +
+				            '(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
+				            '\\s*,\\s*' +
+				            '(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
+				            '(?:\\s*,\\s*' +
+				            '(0|1|0?\\.\\d+))?' +
+				            '\\s*\\)$'
+				        , 'i')),
+				        alpha = !!rgb && rgb[4] != null ? rgb[4] : null,
+
+				        // Convert hex to decimal
+				        decimal = !!rgb? [rgb[1], rgb[2], rgb[3]] : color.replace(
+				            /^#?([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])([a-f0-9][a-f0-9])/i,
 				            function() {
 				                return parseInt(arguments[1], 16) + ',' +
 				                    parseInt(arguments[2], 16) + ',' +
 				                    parseInt(arguments[3], 16);
 				            }
-				        ).split(/,/);
-				    return [
-				        '#',
-				        coverHack.util.color.pad(minmax(parseInt(decimal[0], 10) + difference, 0).toString(16), 2),
-				        coverHack.util.color.pad(minmax(parseInt(decimal[1], 10) + difference, 0).toString(16), 2),
-				        coverHack.util.color.pad(minmax(parseInt(decimal[2], 10) + difference, 0).toString(16), 2)
-				    ].join('');
+				        ).split(/,/),
+				        returnValue;
+
+				    // Return RGB(A)
+				    return !!rgb ?
+				        'rgb' + (alpha !== null ? 'a' : '') + '(' +
+				            Math[darker ? 'max' : 'min'](
+				                parseInt(decimal[0], 10) + difference, darker ? 0 : 255
+				            ) + ', ' +
+				            Math[darker ? 'max' : 'min'](
+				                parseInt(decimal[1], 10) + difference, darker ? 0 : 255
+				            ) + ', ' +
+				            Math[darker ? 'max' : 'min'](
+				                parseInt(decimal[2], 10) + difference, darker ? 0 : 255
+				            ) +
+				            (alpha !== null ? ', ' + alpha : '') +
+				            ')' :
+				        // Return hex
+				        [
+				            '#',
+				            coverHack.util.color.pad(Math[darker ? 'max' : 'min'](
+				                parseInt(decimal[0], 10) + difference, darker ? 0 : 255
+				            ).toString(16), 2),
+				            coverHack.util.color.pad(Math[darker ? 'max' : 'min'](
+				                parseInt(decimal[1], 10) + difference, darker ? 0 : 255
+				            ).toString(16), 2),
+				            coverHack.util.color.pad(Math[darker ? 'max' : 'min'](
+				                parseInt(decimal[2], 10) + difference, darker ? 0 : 255
+				            ).toString(16), 2)
+				        ].join('');
 				},
 				lighterColor: function(color, ratio) {
 				    return coverHack.util.color.changeColor(color, ratio, false);
@@ -59,7 +105,7 @@ $(function(){
 				console.log(data);
 			},
 			changeBG: function(color) {
-				color = coverHack.util.color.darkerColor(color, .3);
+				color = coverHack.util.color.lighterColor(color, .6);
 				$('body').animate( { backgroundColor: color }, 1000);
 			},
 			createColorWheel: function() {
