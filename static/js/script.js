@@ -151,7 +151,7 @@ $(function(){
 			},
 			createColorWheel: function() {
 				var r = Raphael("color-wheel");
-				var pie = r.g.piechart(350, 300, 150, [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], {colors: coverHack.allColors});
+				var pie = r.g.piechart(250, 310, 150, [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], {colors: coverHack.allColors});
 				pie.hover(function () {
 					this.sector.stop();
 					this.sector.scale(1.1, 1.1, this.cx, this.cy);

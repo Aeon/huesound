@@ -88,7 +88,7 @@ a:hover { color: #036; }
 
 #color-wheel {
   display: block;
-  height: 500px;
+  height: 530px;
 }
 
 
@@ -101,9 +101,24 @@ footer {
   width: 100%;
 }
 
-#instructions, #albumsContainer {
+#instructions {
   position: fixed;
-  left: 650px;
+  left: 50px;
+  top: 40px;
+  width: 350px;
+  height: 100px;
+}
+
+#instructions p{
+  font:Arial, Helvetica, sans-serif;
+  font-size:14px;
+  line-height:20px;
+}
+
+
+#albumsContainer {
+  position: fixed;
+  left: 450px;
   top: 100px;
   width: 700px; /* 6 albums + 5 spacers) */
   height: 700px;
@@ -140,7 +155,9 @@ footer {
   width: 24px;
 }
 
-
+#player{
+	margin:0 0 0 50px;
+}
 
 
 
