@@ -144,7 +144,7 @@ $(function(){
 			}
 		},
 		view: {
-			albumTpl: '<li id="%id%"><img src="%baseurl%/%id%.jpg"></li>',
+			albumTpl: '<li id="%id%"><img src="%baseurl%/%id%"></li>',
 			showAlbums: function() {
 				$("#progress" ).hide();
 				var i,
@@ -206,7 +206,7 @@ $(function(){
 				// + "?ts"+(+new Date());
 			coverHack.imgUrlBase = coverHack.local ? 
 				"/img/covers" :
-				"http://musicbrainz.homeip.net/image";
+				"http://musicbrainz.homeip.net/coverarthack/image";
 		}
 	};
 	coverHack.init();	
