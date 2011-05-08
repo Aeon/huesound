@@ -1,5 +1,10 @@
 <!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]--><head>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	
@@ -13,7 +18,11 @@
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 	<link rel="stylesheet" href="css/style.css?v=2">
 
-	<script src="js/libs/modernizr-1.7.min.js"></script></head>
+	<script src="js/libs/modernizr-1.7.min.js"></script>
+	<script src="js/libs/raphael.js"></script>
+	<script src="js/libs/g.raphael-min.js"></script>
+	<script src="js/libs/g.pie.js"></script>
+</head>
 <body>
 	<div id="container">
 		<header>
@@ -21,7 +30,7 @@
 		</header>
 
 		<div id="main" role="main">
-
+			<div id="holder"></div>
 		</div>
 
 		<footer>
@@ -36,5 +45,6 @@
 	<!--[if lt IE 7 ]>
 	<script src="js/libs/dd_belatedpng.js"></script>
 	<script> DD_belatedPNG.fix('img, .png_bg');</script>
-	<![endif]--></body>
+	<![endif]-->
+</body>
 </html>
