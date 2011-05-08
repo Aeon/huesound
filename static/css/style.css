@@ -119,7 +119,7 @@ footer {
 #albumsContainer {
   position: fixed;
   left: 500px;
-  top: 40px;
+  top: 65px;
   width: 700px; /* 6 albums + 5 spacers) */
   height: 700px;
 }
