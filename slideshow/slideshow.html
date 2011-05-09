@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  
+  <!--[if lt IE 9]>
+  <script src="lib/html5shim.js"></script>
+  <![endif]-->  
+  
+  <!-- These are some core styles the slideshow app requires -->
+  <link rel="stylesheet" href="lib/styles.css" />
+  
+  <!-- These are the styles you'll add to make the slides look great -->
+  <link rel="stylesheet" href="css/styles.css" />
+  
+  <title>HueSound</title>
+</head>
+<body>
+  <header>
+    <h1>HueSound</h1>
+    <nav>
+      <ul>
+        <li><button id="prev-btn" title="Previous slide">Previous Slide</button></li>
+        <li><span id="slide-number"></span>/<span id="slide-total"></span></li>
+        <li><button id="next-btn" title="Next Slide">Next Slide</button></li>
+      </ul>
+    </nav>
+  </header>
+  <div id="deck">
+    
+    <!-- Begin slides -->
+    <section>
+      <hgroup>
+       	<h1>HueSound</h1>
+      </hgroup>
+			<div style="width: 100%; height: 500px; text-align: center; margin-top: 50px;">
+	      <img src="images/color-wheel.png" alt="" style="margin-top: 100px; margin-bottom: 100px;"/>
+	      <p>Color-based music discovery...</p>
+			</div>
+    </section>
+    <section>
+      <hgroup>
+        <h1>Team</h1>
+      </hgroup>
+        <p>MusicBrainz integration and backend data by Robert Kaye<br/>
+					<strong>@mayhem</strong>
+				</p>
+				<p>JS and HTML by Anton Stroganov<br/>
+					<strong>@Aeon</strong>
+				</p>
+				<p>
+					Design by Madhavi Jagdish<br/>
+					<strong>@emstar</strong>
+				</p>
+    </section>
+	  <section>
+     <hgroup>
+       <h1>Technology</h1>
+     </hgroup>
+			
+	    <p>MusicBrainz (album cover data)</p>
+	    <p>EchoNest (MB ID to Rdio ID translation and analysis)</p>
+	    <p>Rdio (audio candy)</p>
+	    <p>jQuery + jQuery UI + Raphaël.js (eye candy)</p>
+   </section>
+	  <section>
+	    <hgroup>
+       	<h1><img src="images/color-wheel.png" alt="" style="width: 60px; height: 60px; display: inline;" alt=""/> HueSound.org</h1>
+	    </hgroup>
+			<h3>github.com/Aeon/huesound</h3>
+			<h3>#huesound on irc.freenode.org</h3>
+			<h3>@huesound on twitter</h3>
+   </section>
+    <!-- /End slides -->
+    
+  </div>
+  <!-- /deck -->
+  <script src="lib/jquery-1.5.2.min.js"></script>
+  <script src="lib/jquery.jswipe-0.1.2.js"></script>  
+  <script src="lib/htmlSlides.js"></script>
+  <script>
+    //Do our business when the DOM is ready for us
+    $(function() {
+      
+      //You can trigger Javascript based on the slide number like this:
+      $('html').bind('newSlide', function(e, id) { 
+        switch(id) {
+          case 2:
+            console.log('This is the second slide.');;
+            break;
+          case 3:
+            console.log('Hello, third slide.');
+            break;
+        }
+      });
+
+      //One little option: hideToolbar (boolean; default = false)
+      htmlSlides.init({ hideToolbar: true });
+      
+    });
+  </script>
+  </body>
+</html>
