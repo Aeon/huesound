@@ -1,4 +1,7 @@
 $(function(){
+	mbalbums = function(data) {
+		coverHack.processCovers(data);
+	};
 	coverHack = {
 		allColors: ['#000000', '#CC3333', '#FF3333', '#FF6633', '#FF9933', '#FFCC66', '#FFFF33', '#CCCC33', '#99CC33', '#33CC33', '#009933', '#006633', '#33CC99', '#33CCFF', '#3366CC', '#333399', '#000066', '#663399', '#990099', '#990066', '#FF0066', '#CCCC99', '#996666', '#996633', '#663333', '#CC9966', '#996633', '#663300', '#333300', '#330000', '#333333', '#666666'],
 		// 30 gives us a 6x5 grid, looks nice
@@ -32,14 +35,14 @@ $(function(){
 				dataType: "jsonp",
 				jsonp: false,
 				jsonpCallback: "mbalbums",
-				cache: false,
-				success: function(data) {
-					coverHack.processing = false;
-					coverHack.data = data;
-					coverHack.view.showAlbums();
-					coverHack.resolveTracks();
-				}
+				cache: false
 			});
+		},
+		processCovers: function(data) {
+			coverHack.processing = false;
+			coverHack.data = data;
+			coverHack.view.showAlbums();
+			coverHack.resolveTracks();
 		},
 		resolveTracks: function() {
 			var tracks = [],
@@ -250,5 +253,5 @@ $(function(){
 			$('#play').attr("src", "");
 		}
 	};
-	coverHack.init();	
+	coverHack.init();
 });
