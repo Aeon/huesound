@@ -120,9 +120,8 @@ $(function(){
 				            '(\\d|[1-9]\\d|1\\d{2}|2[0-4][0-9]|25[0-5])' +
 				            '(?:\\s*,\\s*' +
 				            '(0|1|0?\\.\\d+))?' +
-				            '\\s*\\)$'
-				        , 'i')),
-				        alpha = !!rgb && rgb[4] != null ? rgb[4] : null,
+				            '\\s*\\)$', 'i')),
+				        alpha = !!rgb && rgb[4] !== null ? rgb[4] : null,
 
 				        // Convert hex to decimal
 				        decimal = !!rgb? [rgb[1], rgb[2], rgb[3]] : color.replace(
@@ -201,7 +200,7 @@ $(function(){
 				});
 			},
 			changeBG: function(color) {
-				color = coverHack.util.color.lighterColor(color, .6);
+				color = coverHack.util.color.lighterColor(color, 0.6);
 				$('body').animate( { backgroundColor: color }, 1000);
 			},
 			showPlay: function(albumIndex) {
