@@ -244,11 +244,11 @@ $(function(){
 				"/img/covers" :
 				"http://musicbrainz.homeip.net/coverarthack/image";
 			// hook up the play buttons
-			$('#albums .play').live( "click", function(e) {
-				$('#player #play').attr("src", coverHack.rdioPlayer + $(this).data('rdio'));
+			$('.play', $('#albums')).live( "click", function(e) {
+				$('#play').attr("src", coverHack.rdioPlayer + $(this).data('rdio'));
 				$('#large-album').css("background-image", 'url("' + coverHack.imgUrlBase + '/' + $(this).data('album') + '")');  
 			});
-			$('#player #play').attr("src", ""); 
+			$('#play').attr("src", "");
 		}
 	};
 	coverHack.init();	
