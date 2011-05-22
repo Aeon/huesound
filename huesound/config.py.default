@@ -4,4 +4,8 @@
 CONSUMER_KEY = '';
 CONSUMER_SECRET = '';
 
-PG_CONNECT = "dbname=huesound user=huesound host=localhost port=5432"
+# default postgres connect string
+PG_CONNECT = "dbname=huesound user=huesound"
+
+# use this connect string if postgres is running on TCP/IP port 5432
+#PG_CONNECT = "dbname=huesound user=huesound host=localhost port=5432"

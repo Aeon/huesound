@@ -5,8 +5,28 @@ To run your copy of Huesound, follow these steps:
    - jinja2: http://pypi.python.org/pypi/Jinja2/2.5.5
    - werkzeug: http://www.pocoo.org/projects/werkzeug/
 
-2. Install netpbm (for fetching scripts)
+2. Install netpbm (for scripts that fetch new rdio icons)
 
    - apt-get install netpbm 
 
+3. Postgres 8.4 or greater with the cube extension installed.
 
+
+Once you have these prerequisites installed:
+
+1. copy huesound/config.py.default to huesound/config.py
+2. edit huesound/config.py to add the Rdio API keys
+3. check the Postgres connect string to make sure it makes sense for your setup.
+4. in the sql directory, run setup.sh, which should setup the DB
+5. run bin/new_releases.py which will download information for the latest releases
+5. run bin/process_icons.py which will download the icons and save the color to disk
+6. Finally, start the huesound server with
+
+    bin/manage.py runserver
+
+Now you can connect to the huesound server. Right now, these methods work:
+
+   http://localhost:5000/<color>/<count>/<h or j>
+
+   http://localhost:5000/FF00FF/10/h  -> gives a crude HTML page for purple icons
+   http://localhost:5000/FF00FF/10/j  -> gives the JSON output for purple icons
