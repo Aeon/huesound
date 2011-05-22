@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+# TODO: Add these 
+CONSUMER_KEY = '';
+CONSUMER_SECRET = '';
+
+PG_CONNECT = "dbname=huesound user=huesound host=localhost port=5432"

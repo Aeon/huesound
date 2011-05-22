@@ -1,0 +1,12 @@
+To run your copy of Huesound, follow these steps:
+
+1. Install python modules:
+
+   - jinja2: http://pypi.python.org/pypi/Jinja2/2.5.5
+   - werkzeug: http://www.pocoo.org/projects/werkzeug/
+
+2. Install netpbm (for fetching scripts)
+
+   - apt-get install netpbm 
+
+

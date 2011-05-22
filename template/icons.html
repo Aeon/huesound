@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block body %}
+  <h2>Rdio icons by color</h2>
+  <iframe name="player" width="300" height="200"></iframe>
+  <ul>
+  {% for icon in data %}
+       <li><a href="{{ icon.embed_url }}" target="player"><img src="{{ icon.icon_url }}"></a></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
