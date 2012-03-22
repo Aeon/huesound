@@ -1,3 +1,4 @@
+#!/usr/local/virtualenv/huesound/bin/python
 #!/usr/bin/env python
 
 import sys
@@ -9,7 +10,7 @@ import json;
 import psycopg2;
 from huesound import config
 
-NUM_ALBUMS_PER_CALL = 100
+NUM_ALBUMS_PER_CALL = 1000
 
 try:
     conn = psycopg2.connect(config.PG_CONNECT)
