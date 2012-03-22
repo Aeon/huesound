@@ -55,7 +55,11 @@ $(function(){
 				// tracks[Math.floor(j/10)].push("id=musicbrainz:song:" + coverHack.data[i].tracks[0]);
 				// j++;
 
-				coverHack.fetchTrack(coverHack.data[i].tracks[0], i, 0);
+				if(coverHack.data[i].embed_url) {
+					coverHack.view.showPlay(i);
+				}
+
+				// coverHack.fetchTrack(coverHack.data[i].tracks[0], i, 0);
 
 				// for(j = 0; j < coverHack.data[i].tracks.length; j++) {
 				// 	coverHack.fetchTrack(coverHack.data[i].tracks[j], i, j);
@@ -67,6 +71,7 @@ $(function(){
 			// }
 
 		},
+		/*
 		fetchTrack: function(trackMBID, albumIndex, trackIndex) {
 			$.ajax({
 				url: coverHack.echoNestAPI + "&id=musicbrainz:song:" + trackMBID,
@@ -89,6 +94,7 @@ $(function(){
 				}
 			});
 		},
+		*/
 		util: {
 			// http://stackoverflow.com/questions/1507931/generate-lighter-darker-color-in-css-using-javascript
 			color: {
@@ -174,7 +180,7 @@ $(function(){
 			}
 		},
 		view: {
-			albumTpl: '<li id="%i%" data-album="%id%"><img src="%baseurl%/%id%"></li>',
+			albumTpl: '<li id="%i%" data-album="%id%"><img src="%icon_url%"></li>',
 			showAlbums: function() {
 				$("#progress" ).hide();
 				var i,
@@ -184,7 +190,7 @@ $(function(){
 				for(i = 0; i < coverHack.data.length; i++) {
 					album = coverHack.data[i];
 					tpl = coverHack.view.albumTpl;
-					tpl = tpl.replace(/%baseurl%/g, coverHack.imgUrlBase);
+					tpl = tpl.replace(/%icon_url%/g, album.icon_url);
 					tpl = tpl.replace(/%i%/g, i);
 					tpl = tpl.replace(/%id%/g, album.release);
 					albumsHTML.push(tpl);
@@ -208,7 +214,7 @@ $(function(){
 			},
 			showPlay: function(albumIndex) {
 				var albumCover = $('#albums #' + albumIndex);
-				albumCover.data('rdio', coverHack.data[albumIndex].rdio);
+				albumCover.data('rdio', coverHack.data[albumIndex].embed_url);
 				albumCover.addClass('play');
 				albumCover.append('<div class="playbtn"></div>');
 				$('.playbtn', albumCover).fadeIn(500);
@@ -240,15 +246,12 @@ $(function(){
 			coverHack.view.createColorWheel();
 			coverHack.albumAPI = coverHack.local ? 
 				"/images.json" :
-				"http://musicbrainz.homeip.net/coverarthack/images/%color%/" + coverHack.albumCount;
+				"http://huesound.org:5555/%color%/" + coverHack.albumCount + "/j";
 				// + "?ts"+(+new Date());
-			coverHack.imgUrlBase = coverHack.local ? 
-				"/img/covers" :
-				"http://musicbrainz.homeip.net/coverarthack/image";
 			// hook up the play buttons
 			$('.play', $('#albums')).live( "click", function(e) {
-				$('#play').attr("src", coverHack.rdioPlayer + $(this).data('rdio'));
-				$('#large-album').css("background-image", 'url("' + coverHack.imgUrlBase + '/' + $(this).data('album') + '")');  
+				$('#play').attr("src", $(this).data('rdio'));
+				$('#large-album').css("background-image", 'url("' + $(this).attr('src') + '")');  
 			});
 			$('#play').attr("src", "");
 		}

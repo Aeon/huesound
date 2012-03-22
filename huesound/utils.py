@@ -34,7 +34,7 @@ def render_template(template, **context):
                     mimetype='text/html')
 
 def render_json(data):
-    return Response(dumps(data), 
+    return Response("mbalbums(" + dumps(data) + ");", 
                     mimetype='application/json')
 
 def validate_url(url):
