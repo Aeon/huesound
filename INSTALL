@@ -4,6 +4,8 @@ To run your copy of Huesound, follow these steps:
 
    - jinja2: http://pypi.python.org/pypi/Jinja2/2.5.5
    - werkzeug: http://www.pocoo.org/projects/werkzeug/
+   - oauth2
+   - psycopg2
 
 2. Install netpbm (for scripts that fetch new rdio icons)
 
@@ -30,3 +32,34 @@ Now you can connect to the huesound server. Right now, these methods work:
 
    http://localhost:5000/FF00FF/10/h  -> gives a crude HTML page for purple icons
    http://localhost:5000/FF00FF/10/j  -> gives the JSON output for purple icons
+
+
+Apache deployment config:
+
+	requirements: mod_wsgi compiled with same python you're using to serve the app
+
+httpd.conf
+LoadModule wsgi_module modules/mod_wsgi.so
+WSGIPythonHome /usr/local/virtualenv/BASELINE
+WSGISocketPrefix /var/run/wsgi
+
+huesound.conf
+
+<VirtualHost *:5555>
+    ServerName huesound.org
+    ServerAlias www.huesound.org
+
+    LogLevel info 
+    ErrorLog /var/www/vhosts/huesound/log/error_log
+
+    DocumentRoot /var/www/vhosts/huesound/wsgi
+    WSGIDaemonProcess huesound.org processes=2 threads=5
+    WSGIProcessGroup huesound.org
+    WSGIApplicationGroup %{GLOBAL}
+    WSGIScriptAlias / /var/www/vhosts/huesound/wsgi/huesound.wsgi
+
+    <Directory /var/www/vhosts/huesound/wsgi> 
+        Order deny,allow
+        Allow from all
+    </Directory>
+</VirtualHost>
